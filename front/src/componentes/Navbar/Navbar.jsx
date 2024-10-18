@@ -32,7 +32,7 @@ export function Navbar({ isLoggedIn, onLogoutClick }) {
 
   return (
     <nav className="navbar">
-      <img src="/logo_Cast.png" alt="Logo" className="navbar-logo" /> {/* Asegúrate de que la ruta es correcta */}
+      <img src="/logo_Cast.png" alt="Logo" className="navbar-logo" />
       <h2>Turnero Hospital Municipal</h2>
       <Button
       style={buttonStyles}
