@@ -1,0 +1,59 @@
+h4 
+{
+    margin-top: 40px;
+    text-align: left;
+}
+
+.busqueda 
+{
+   
+    max-width: 40%;
+    margin-bottom: 20px;
+}
+
+th, td
+{
+    border: solid 1px gray;
+    padding: 3px;
+}
+
+thead
+{
+    background-color: rgb(48, 49, 49);
+    color: white;
+}
+
+tbody tr:nth-child(even),
+tbody tr:nth-child(even)
+{
+    background-color: #cac5c5;
+}
+
+.editar, .ver, .eliminar
+{
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0 2px;
+}
+
+.editar 
+  {
+    background-color: #4CAF50;
+  }
+
+.ver
+{
+    background-color: #2123aa;
+}
+
+.eliminar
+{
+    background-color: #f44336;
+}

@@ -1,0 +1,53 @@
+.titulo-card {
+  margin-top: 50px;
+}
+
+.nombre-medico {
+  text-align: left;
+}
+
+
+.container-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; 
+    justify-content: start; 
+    width: 90vw;
+    
+  }
+  
+
+  
+  .card {
+    background-color: #f7f4f4;
+    padding: 20px;
+    border: 2px solid #333;    
+    max-width: 200px;
+    text-align: left;
+  }
+
+  .dia-card {
+    margin-top: 1px;
+    font-size: 20px;
+    font-weight: bolder;
+    background-color: rgb(234, 173, 94);
+    text-align: center;
+  }
+
+ 
+  
+  input[type="radio"] {
+    margin-right: 5px;
+ 
+  }
+
+  Button {
+    margin: 10px;
+  }
+
+  Aviso {
+    display: flex;
+    width: 50%;
+    height: 50%;
+  }
+  
