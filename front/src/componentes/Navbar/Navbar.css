@@ -1,40 +1,58 @@
-/* Navbar.css */
-
 /* Estilo para la barra de navegación */
 .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 10vh; /* 15% del alto del viewport */
-    background-color: black;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px; /* Añade padding a los lados para que el contenido no esté pegado al borde */
-    box-sizing: border-box; /* Incluye padding y border en el ancho total del elemento */
-  }
-  
-  /* Estilo para el logo */
-  .navbar-logo {
-    height: 80%; /* Ajusta la altura del logo según sea necesario */
-  }
-  
-  /* Estilo para el texto dentro de la navbar */
-  .navbar h3 {
-    margin: 0;
-    color:aliceblue/* Elimina el margen predeterminado del párrafo */
-  }
-  
-  /* Estilo para el botón de login */
-  .login-icon {
-    background-color: white;
-    color: black;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px; /* Opcional: añade bordes redondeados */
-    font-size: 14px; /* Ajusta el tamaño del texto según sea necesario */
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10vh; /* 15% del alto del viewport */
+  background-color: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px; /* Añade padding a los lados para que el contenido no esté pegado al borde */
+  box-sizing: border-box; /* Incluye padding y border en el ancho total del elemento */
+  z-index: 1000;
+}
+
+/* Estilo para el logo */
+.navbar-logo {
+  height: 80%; /* Ajusta la altura del logo según sea necesario */
+}
+
+/* Estilo para el texto dentro de la navbar */
+.navbar h3 {
+  margin: 0;
+  color:aliceblue/* Elimina el margen predeterminado del párrafo */
+}
+
+
+/* Estilos para el tooltip */
+button[data-tooltip] {
+position: relative;
+}
+
+button[data-tooltip]::after {
+content: attr(data-tooltip);
+position: absolute;
+bottom: -30px; /* Ajusta según sea necesario para que quede debajo */
+left: 50%;
+transform: translateX(-50%);
+background-color: #333; /* Color de fondo del tooltip */
+color: #fff; /* Color del texto del tooltip */
+padding: 5px;
+border-radius: 4px;
+font-size: 12px;
+white-space: nowrap;
+opacity: 0;
+visibility: hidden;
+transition: opacity 0.3s ease;
+z-index: 100;
+}
+
+button[data-tooltip]:hover::after {
+opacity: 1;
+visibility: visible;
+}
+
   
