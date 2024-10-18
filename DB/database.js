@@ -69,7 +69,14 @@ function conectarDB() {
 
     function uno_dni(tabla, dni){
         return new Promise((resolve, reject)=>{
-            conexion.query(`SELECT * FROM ${tabla} WHERE paciente_dni=${dni}`, (error, result)=>{
+            const query = `
+                SELECT t.*, m.nombre, m.apellido , e.espec AS especialidad 
+                FROM ${tabla} t 
+                JOIN medicos m ON t.medico_id = m.id 
+                JOIN especialidad e ON m.especialidad_id = e.id 
+                WHERE t.paciente_dni = ?
+            `;
+            conexion.query(query, [dni], (error, result)=>{
                 return error ? reject(error) : resolve(result);
             });
         });

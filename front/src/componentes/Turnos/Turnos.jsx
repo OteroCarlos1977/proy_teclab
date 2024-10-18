@@ -24,7 +24,7 @@ export function Turnos() {
     try {
       const response = await fetch(`http://localhost:3000/api/turnos/${dni}`);
       const data = await response.json();
-      console.log(data); // Cambié a `data` para mostrar correctamente la respuesta
+      console.log(data); 
       if (!data.error) {
         const turnosFiltrados = data.body.filter(turno => 
           new Date(turno.fecha_turno) >= new Date() // Filtrar por fecha actual
@@ -45,9 +45,14 @@ export function Turnos() {
 
   const cancelarTurno = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/turnos/${id}`, {
-        method: 'DELETE',
+      const response = await fetch(`http://localhost:3000/api/turnos`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),  // Envía el ID del turno en el cuerpo
       });
+  
       if (response.ok) {
         setTurnos(turnos.filter(turno => turno.id !== id));
       } else {
