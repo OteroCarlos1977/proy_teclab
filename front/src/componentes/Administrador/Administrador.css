@@ -1,59 +1,113 @@
-h4 
-{
+/* Encabezado */
+h4 {
     margin-top: 40px;
     text-align: left;
-}
-
-.busqueda 
-{
-   
-    max-width: 40%;
-    margin-bottom: 20px;
-}
-
-th, td
-{
-    border: solid 1px gray;
-    padding: 3px;
-}
-
-thead
-{
-    background-color: rgb(48, 49, 49);
-    color: white;
-}
-
-tbody tr:nth-child(even),
-tbody tr:nth-child(even)
-{
-    background-color: #cac5c5;
-}
-
-.editar, .ver, .eliminar
-{
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin: 0 2px;
-}
-
-.editar 
-  {
-    background-color: #4CAF50;
+    font-family: 'Arial', sans-serif;
+    font-size: 1.2rem;
+    color: #333;
   }
-
-.ver
-{
-    background-color: #2123aa;
-}
-
-.eliminar
-{
+  
+  /* Campo de búsqueda */
+  .busqueda {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Estilos de tabla */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  thead {
+    background-color: #333;
+    color: white;
+    text-transform: uppercase;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Botones */
+  .editar, .ver, .eliminar {
+    position: relative; /* Necesario para posicionar el tooltip */
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editar {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .ver {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .eliminar {
     background-color: #f44336;
-}
+    color: white;
+  }
+  
+  /* Tooltip styles (legendas) */
+  .editar::before, .ver::before, .eliminar::before {
+    content: attr(data-tooltip); /* Usaremos el atributo data-tooltip para el contenido dinámico */
+    position: absolute;
+    top: 110%; /* Colocar el tooltip justo debajo del botón */
+    left: 50%; /* Centrar horizontalmente */
+    transform: translateX(-50%); /* Asegurarse de que esté bien centrado */
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 8px;
+    font-size: 12px;
+    border-radius: 3px;
+    opacity: 0;
+    white-space: nowrap; /* Para evitar que el texto se divida en varias líneas */
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  
+  .editar:hover::before, .ver:hover::before, .eliminar:hover::before {
+    opacity: 1;
+  }
+  
+  /* Hover effects */
+  .editar:hover {
+    background-color: #45a049;
+  }
+  
+  .ver:hover {
+    background-color: #1e88e5;
+  }
+  
+  .eliminar:hover {
+    background-color: #e53935;
+  }
+  
