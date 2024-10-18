@@ -18,9 +18,7 @@ export function Principal() {
         <Button 
         texto="Ver Turno" 
         style ={{backgroundColor: 'rgba(117, 225, 113, 0.8)' }}/> 
-        <Button 
-        texto="Cancelar Turno" 
-        style ={{backgroundColor: 'rgba(178, 43, 30, 0.8)' }}/>
+        
     </>
         
     ) 
