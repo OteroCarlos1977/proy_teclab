@@ -7,6 +7,7 @@ import { Tarjeta } from './componentes/Tarjeta/Tarjeta.jsx';
 import { Formulario } from './componentes/Formulario/Formulario.jsx';
 import { Selector } from './componentes/Selector/Selector.jsx';
 import { Principal } from './componentes/Principal/Principal.jsx';
+import { Turnos } from './componentes/Turnos/Turnos.jsx';
 import { Navbar } from './componentes/Navbar/Navbar.jsx';
 import { Confirmacion } from './componentes/Confirmacion/Confirmacion.jsx';
 import { Administrador } from './componentes/Administrador/Administrador.jsx';
@@ -48,6 +49,7 @@ function App() {
           <Route path="/tarjeta" element={<Tarjeta />} />
           <Route path="/formulario" element={<Formulario />} />
           <Route path="/confirmacion" element={<Confirmacion />} />
+          <Route path="/turno" element={<Turnos />} /> 
           <Route 
             path="/administrar" 
             element={
