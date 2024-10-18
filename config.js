@@ -9,10 +9,10 @@ module.exports = {
         
     },
     mysql:{
-        host: process.env.MYSQL_HOST || 'localhost',
-        user: process.env.MYSQL_USER || 'root',
-        password:  process.env.MYSQL_PASSWORD || '',
-        database: process.env.MYSQL_DB || 'hospital',
+        host: process.env.MYSQL_HOST || 'mysql-tpfinal.alwaysdata.net',
+        user: process.env.MYSQL_USER || 'tpfinal',
+        password:  process.env.MYSQL_PASSWORD || '2020Malena',
+        database: process.env.MYSQL_DB || 'tpfinal_hospital',
         
     }
 }
