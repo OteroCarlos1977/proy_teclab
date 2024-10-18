@@ -17,8 +17,8 @@ export function Principal() {
         onClick={() => navigate ('/selector')}/> 
         <Button 
         texto="Ver Turno" 
-        style ={{backgroundColor: 'rgba(117, 225, 113, 0.8)' }}/> 
-        
+        style ={{backgroundColor: 'rgba(117, 225, 113, 0.8)' }}
+        onClick={() => navigate ('/turno')}/>        
     </>
         
     ) 
