@@ -1,6 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from 'react';
+
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { Button } from '../Button/Button';
 import {faUser, faUserMd, faStethoscope, faCalendarCheck, faEye, faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -137,10 +139,12 @@ export function Administrador() {
     setSearchTerm(''); // Reiniciar el término de búsqueda al cambiar de pestaña
   };
 
+
   // Usar navigate para redirigir a Carga con activeTab
   const handleShowCarga = () => {
     navigate('/carga', { state: { activeTab } });
   };
+
 
   return (
     <>
@@ -188,7 +192,11 @@ export function Administrador() {
           tooltip="Nuevo" 
           icono={faPlusCircle}
           style={{ color: 'black' }}
+
           onClick={(handleShowCarga)}
+
+          onClick={() => handleTabChange('turnos')}
+
         />
       </div>
       {/* Mostrar contenido según la pestaña activa */}
@@ -289,6 +297,7 @@ export function Administrador() {
         </tbody>
       </table>
       )}
+ carga
 
       {activeTab === 'especialidades' && (
         
@@ -324,6 +333,44 @@ export function Administrador() {
       )}
         
       
+
+
+
+      {activeTab === 'especialidades' && (
+        
+        <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredEspecialidad.map((especialidad) => (
+            <tr key={especialidad.id}>
+              <td>{especialidad.espec}</td>
+              <td>
+               <Button 
+                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  icono={faEdit} 
+                  tooltip="Editar" 
+                  onClick={() => handleEdit(especialidad.id)} 
+                />
+                <Button 
+                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  icono={faTrash} 
+                  tooltip="Eliminar" 
+                  onClick={() => handleDelete(especialidad.id)} 
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      )}
+        
+      
+
 
       {activeTab === 'turnos' && (
         <table>
