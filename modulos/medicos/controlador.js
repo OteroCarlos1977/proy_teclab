@@ -31,11 +31,17 @@ module.exports = function(dbInyectada){
     function agregar(body){
         return db.agregar(TABLA, body);
     }
+
+    function medEspec() {
+        return db.medicosConEspecialidad(); 
+    }
+
     return {
         todos,
         uno,
         agregar,
         eliminar,
-        disponible
+        disponible,
+        medEspec
     }
 }

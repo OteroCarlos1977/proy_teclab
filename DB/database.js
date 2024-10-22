@@ -51,7 +51,44 @@ function conectarDB() {
         });
     }
 
-    function usuario(usuario) {
+    
+    function usuarios(usuario) {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL con JOIN
+            const sql = `
+                SELECT u.*, a.*
+                FROM usuarios u
+                JOIN auth a ON u.id = a.id
+                `;
+    
+            // Ejecuta la consulta con el valor del parámetro
+            conexion.query(sql, [usuario], (error, result) => {
+                return error ? reject(error) : resolve(result);
+            });
+        });
+    }
+
+    function especialidad() {
+        return new Promise((resolve, reject) => {
+            // Consulta SQL con JOIN
+            const sql = `
+                SELECT t.id, t.paciente_dni, t.fecha_turno, t.horario, m.nombre AS medico_nombre, m.apellido AS medico_apellido , e.espec AS especialidad, p.nombre AS paciente_nombre, p.apellido AS paciente_apellido 
+                FROM turnos t 
+                JOIN medicos m ON t.medico_id = m.id 
+                JOIN especialidad e ON t.especialidad_id = e.id 
+                JOIN pacientes p ON t.paciente_dni = p.dni;
+                `;
+    
+            // Ejecuta la consulta con el valor del parámetro
+            conexion.query(sql, (error, result) => {
+                return error ? reject(error) : resolve(result);
+            });
+        });
+    }
+    
+      
+    
+    function un_usuario(usuario) {
         return new Promise((resolve, reject) => {
             // Consulta SQL con JOIN
             const sql = `
@@ -120,6 +157,19 @@ function conectarDB() {
             });
         });
     }
+
+    function medicosConEspecialidad() {
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT m.*, e.espec AS especialidad 
+                FROM medicos m 
+                JOIN especialidad e ON m.especialidad_id = e.id;
+                `;
+            conexion.query(query, (error, result) => {
+                return error ? reject(error) : resolve(result);
+            });
+        });
+    }
     
     
     function agregar(tabla, data){
@@ -151,7 +201,9 @@ function conectarDB() {
     module.exports = {
         todos, 
         uno,
-        usuario,
+        medicosConEspecialidad,
+        usuarios,
+        un_usuario,
         uno_dni,
         uno_medico,
         uno_especialidad,
@@ -159,5 +211,6 @@ function conectarDB() {
         agregar,
         eliminar,
         query, 
-        disponible
+        disponible,
+        especialidad
     }

@@ -3,16 +3,16 @@ const respuesta = require("../../red/respuestas");
 const controlador = require("./index");
 const router = express.Router();
 
-router.get("/", todos);
+router.get("/", especialidad);
 router.get("/:dni", uno);
 router.get("/medico/:id", uno_medico);
 router.get("/otorgados/:id", uno_especialidad);
 router.post("/", agregar);
 router.put("/", eliminar);
 
-async function todos(req, res, next) {
+async function especialidad(req, res, next) {
   try {
-    const items = await controlador.todos();
+    const items = await controlador.especialidad();
     respuesta.success(req, res, items, 200);
   } catch (err) {
     next(err);

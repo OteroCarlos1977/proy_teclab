@@ -4,7 +4,9 @@ const controlador = require("./index");
 const router = express.Router();
 
 router.get("/", todos);
+router.get("/conespec/", medEspec);
 router.get("/:id", uno);
+
 router.get("/disponible/:id", disponible)
 router.post("/", agregar);
 router.put("/", eliminar);
@@ -57,6 +59,15 @@ async function eliminar(req, res, next) {
       respuesta.success(req, res, 'Registro eliminado satisfactoriamente', 200);
     } catch (err) {
         next(err);
+    }
+  }
+
+  async function medEspec(req, res, next) {
+    try {
+      const items = await controlador.medEspec();
+      respuesta.success(req, res, items, 200);
+    } catch (err) {
+      next(err);
     }
   }
 
