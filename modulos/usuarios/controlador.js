@@ -21,8 +21,12 @@ module.exports = function(dbInyectada){
         return db.uno(TABLA, id);
     }
 
-    function usuario(usuario){
-        return db.usuario(usuario);
+    function usuarios(){
+        return db.usuarios();
+    }
+
+    function un_usuario(usuario){
+        return db.un_usuario(usuario);
     }
     
     function eliminar(body){
@@ -66,7 +70,8 @@ module.exports = function(dbInyectada){
     return {
         todos,
         uno,
-        usuario,
+        usuarios,
+        un_usuario,
         agregar,
         eliminar,
     }

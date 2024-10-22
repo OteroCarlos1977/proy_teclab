@@ -12,8 +12,8 @@ module.exports = function(dbInyectada){
         db = require('../../DB/database');
     }
 
-    function todos(){
-        return db.todos(TABLA);
+    function especialidad(){
+        return db.especialidad(TABLA);
     }
     
     function uno(dni){
@@ -36,7 +36,7 @@ module.exports = function(dbInyectada){
         return db.agregar(TABLA, body);
     }
     return {
-        todos,
+        especialidad,
         uno,
         agregar,
         eliminar,

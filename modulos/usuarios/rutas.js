@@ -6,8 +6,9 @@ const controlador = require("./index");
 const router = express.Router();
 
 router.get("/", todos);
+router.get("/usuarios/", usuarios);
+router.get("/usuario/:usuario", un_usuario);
 router.get("/:id", uno);
-router.get("/usuario/:usuario", usuario);
 router.post("/", agregar);
 router.put("/",  eliminar);
 
@@ -29,9 +30,18 @@ async function uno(req, res, next) {
   }
 }
 
-async function usuario(req, res, next) {
+async function usuarios(req, res, next) {
   try {
-    const items = await controlador.usuario(req.params.usuario);
+    const items = await controlador.usuarios();
+    respuesta.success(req, res, items, 200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function un_usuario(req, res, next) {
+  try {
+    const items = await controlador.un_usuario(req.params.usuario);
     respuesta.success(req, res, items, 200);
   } catch (err) {
     next(err);
