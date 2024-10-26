@@ -91,17 +91,34 @@ export function Administrador() {
           const response = await fetch('http://localhost:3000/api/turnos/');
           const data = await response.json();
           if (!data.error && data.body) {
-            setTurnos(data.body);
+            const formattedData = data.body.map(turno => {
+              // Formatear la fecha
+              const fechaTurno = new Date(turno.fecha_turno);
+              const formattedFechaTurno = fechaTurno.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+              });
+  
+              // Formatear la hora
+              const horario = turno.horario.slice(0, 5); // Recorta la cadena para dejar solo "HH:MM"
+  
+              return {
+                ...turno,
+                fecha_turno: formattedFechaTurno,
+                horario: horario
+              };
+            });
+  
+            setTurnos(formattedData);
           } else {
             console.error('Error al obtener la lista de turnos');
           }
         } catch (error) {
           console.error('Error en la solicitud:', error);
         }
-
-      
       };
-
+  
       fetchTurnos();
     }
   }, [activeTab]);
@@ -141,6 +158,57 @@ export function Administrador() {
   const handleShowCarga = () => {
     navigate('/carga', { state: { activeTab } });
   };
+
+  const handleDelete = async (id) => {
+    try {
+      let url = '';
+      let updateState;
+  
+      // Seleccionamos la URL y la función de actualización según la pestaña activa
+      switch (activeTab) {
+        case 'medicos':
+          url = `http://localhost:3000/api/medicos`;
+          updateState = setMedicos;
+          break;
+        case 'usuarios':
+          url = `http://localhost:3000/api/usuarios`;
+          updateState = setUsuarios;
+          break;
+        case 'especialidades':
+          url = `http://localhost:3000/api/especialidad`;
+          updateState = setEspecialidad;
+          break;
+        case 'turnos':
+          url = `http://localhost:3000/api/turnos`;
+          updateState = setTurnos;
+          break;
+        default:
+          console.error('Pestaña activa desconocida');
+          return;
+      }
+  
+      // Realizamos la solicitud PUT para eliminar el registro
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id }),  // Enviamos el ID en el cuerpo de la solicitud
+      });
+  
+      if (response.ok) {
+        // Filtramos el estado actual para eliminar el elemento borrado
+        updateState(prevItems => prevItems.filter(item => item.id !== id));
+      } else {
+        alert(`No se pudo eliminar el elemento en la pestaña ${activeTab}.`);
+      }
+    } catch (err) {
+      alert(`Error al eliminar el elemento en la pestaña ${activeTab}.`);
+    }
+  };
+
+
+
 
   return (
     <>
@@ -216,19 +284,19 @@ export function Administrador() {
                 <td>{medico.matricula}</td>
                 <td>
                 <Button 
-                    style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faEye} 
                     tooltip="Ver"
                     onClick={() => handleView(medico.id)} 
                   />
                   <Button 
-                    style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faEdit} 
                     tooltip="Editar" 
                     onClick={() => handleEdit(medico.id)} 
                   />
                   <Button 
-                    style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faTrash} 
                     tooltip="Eliminar" 
                     onClick={() => handleDelete(medico.id)} 
@@ -266,19 +334,19 @@ export function Administrador() {
               <td>{usuario.password}</td>
               <td>
               <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEye} 
                   tooltip="Ver"
                   onClick={() => handleView(usuario.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(usuario.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(usuario.id)} 
@@ -305,13 +373,13 @@ export function Administrador() {
               <td>{especialidad.espec}</td>
               <td>
                <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(especialidad.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(especialidad.id)} 
@@ -349,13 +417,13 @@ export function Administrador() {
               <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
               <td>
                 <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(turno.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'gray', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(turno.id)} 
@@ -381,7 +449,3 @@ const handleEdit = (id) => {
   // Lógica para editar el médico
 };
 
-const handleDelete = (id) => {
-  console.log(`Eliminar médico con ID: ${id}`);
-  // Lógica para eliminar el médico
-};

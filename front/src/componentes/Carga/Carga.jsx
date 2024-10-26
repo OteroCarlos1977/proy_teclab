@@ -26,7 +26,7 @@ export function Carga() {
   // Renderizado condicional del formulario según la pestaña activa
   return (
     <>
-      <h4 className="titulo_form">{`Cargar nuevo ${activeTab}`}</h4>
+      <h4 className="titulo_form">{`Cargar Nuevo:  ${activeTab}`}</h4>
       <div className="container_form">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Formulario para Médicos */}

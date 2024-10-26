@@ -47,7 +47,7 @@ h4 {
   
   /* Botones */
   .editar, .ver, .eliminar {
-    position: relative; /* Necesario para posicionar el tooltip */
+    position: relative; 
     width: 35px;
     height: 35px;
     display: inline-flex;
