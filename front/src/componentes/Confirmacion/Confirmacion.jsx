@@ -1,11 +1,21 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
+import Swal from 'sweetalert2';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './Confirmacion.css'; 
 
 export function Confirmacion() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const showAlert = () => {
+    Swal.fire({
+      title: 'Turno Confirmado',
+      text: 'El turno ha sido confirmado y se ha enviado un correo con los detalles.',
+      icon: 'success',
+      confirmButtonText: 'Continuar',
+    });
+  }
 
   // Obteniendo los datos pasados a través de la navegación
   // eslint-disable-next-line no-unused-vars
@@ -44,13 +54,13 @@ export function Confirmacion() {
         throw new Error("Error al enviar el correo de confirmación");
       }
 
-      alert("El turno ha sido confirmado y se ha enviado un correo con los detalles.");
+      showAlert();
       
       // Redirige a la página principal o a otra página
       navigate("/");
     } catch (error) {
       console.error("Error al enviar el correo:", error);
-      alert("Hubo un error al enviar el correo de confirmación. Por favor, inténtelo nuevamente.");
+      
     }
   };
 

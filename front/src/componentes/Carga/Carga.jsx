@@ -19,8 +19,48 @@ export function Carga() {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    // Añadimos el id como 0 para que el backend genere uno nuevo
+    const requestData = { id: 0, ...data };
+    let endpoint = '';
+
+    // Selección de endpoint según la pestaña activa
+    switch (activeTab) {
+      case 'medicos':
+        endpoint = 'http://localhost:3000/api/medicos';
+        break;
+      case 'usuarios':
+        endpoint = 'http://localhost:3000/api/usuarios/';
+        break;
+      case 'especialidades':
+        endpoint = 'http://localhost:3000/api/especialidad/';
+        break;
+      case 'turnos':
+        endpoint = 'http://localhost:3000/api/turnos';
+        break;
+      default:
+        console.error('Tab no válido');
+        return;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al enviar los datos');
+      }
+
+      console.log('Datos enviados con éxito');
+      navigate("/administrar");
+    } catch (error) {
+      console.error('Error en la solicitud:', error);
+    }
   };
 
   // Renderizado condicional del formulario según la pestaña activa
