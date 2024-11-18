@@ -132,7 +132,7 @@ export function Formulario() {
 
       <h4 className="titulo_form">Carga Datos Paciente</h4>
       <div className="container_form">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className= "formulario" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group-dni">
             <InputField
               label="DNI"

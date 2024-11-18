@@ -259,6 +259,7 @@ export function Administrador() {
           onClick={(handleShowCarga)}
         />
       </div>
+
       {/* Mostrar contenido según la pestaña activa */}
       {activeTab === 'medicos' && (
         <table>
@@ -306,7 +307,9 @@ export function Administrador() {
             ))}
           </tbody>
         </table>
+        
       )}
+      
 
       {activeTab === 'usuarios' && (
         <table>

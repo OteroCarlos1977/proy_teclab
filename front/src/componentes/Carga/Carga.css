@@ -1,6 +1,6 @@
 form
 {
-    width: 30%;
+    width: 30% !important;
     min-width: 200px;
 }
 

@@ -5,12 +5,16 @@ h4
 
 .form_login 
 {
-    width: 30%;
+    width: 30% !important;
     min-width: 200px;
+    align-content: center;
+    align-items: center;
 }
 
 .form_login input[type="text"], input[type="password"] 
 {
     width: 70%;
     height: 40%;
+    
 }
+

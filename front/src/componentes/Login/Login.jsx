@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { InputField } from "../InputField/InputField";
+import { Button } from "../Button/Button";
 import './Login.css'
 
 // eslint-disable-next-line react/prop-types
@@ -62,8 +63,9 @@ export function Login({ onLoginSuccess }) {
 
   return (
     <>
-      <h4 className="titulo_form">Ingreso Administrar</h4>
+      
       <div className="container_form">
+      <h4 className="titulo_form">Ingreso Administrar</h4>
         <form onSubmit={handleSubmit(onSubmit)} className="form_login">
           <InputField
             label="Usuario"
@@ -91,18 +93,24 @@ export function Login({ onLoginSuccess }) {
           {loginError && <p className="error_message">{loginError}</p>}
 
           <div className="submit-button-container">
-            <input type="submit" value="Ingresar" />
+          <Button
+              texto="Ingresar"
+              style={{}}
+              type="submit" // Reemplaza por la función deseada
+            />
+             <Button
+            texto="Volver"
+            style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
+            onClick={() => navigate("/")}
+            tooltip="Regresar a la página anterior" // Tooltip opcional
+          />
+
           </div>
+         
         </form>
       </div>
 
-      <button
-        className="volver-button"
-        style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
-        onClick={() => navigate('/')}  
-      >
-        Volver
-      </button>
+     
     </>
   );
 }
