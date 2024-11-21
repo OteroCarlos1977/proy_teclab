@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button';
 import {faUser, faUserMd, faStethoscope, faCalendarCheck, faEye, faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import Swal from "sweetalert2";
 
 import './Administrador.css';
 
@@ -159,55 +160,102 @@ export function Administrador() {
     navigate('/carga', { state: { activeTab } });
   };
 
-  const handleDelete = async (id) => {
+  
+
+const handleDelete = async (id) => {
     try {
-      let url = '';
-      let updateState;
-  
-      // Seleccionamos la URL y la función de actualización según la pestaña activa
-      switch (activeTab) {
-        case 'medicos':
-          url = `http://localhost:3000/api/medicos`;
-          updateState = setMedicos;
-          break;
-        case 'usuarios':
-          url = `http://localhost:3000/api/usuarios`;
-          updateState = setUsuarios;
-          break;
-        case 'especialidades':
-          url = `http://localhost:3000/api/especialidad`;
-          updateState = setEspecialidad;
-          break;
-        case 'turnos':
-          url = `http://localhost:3000/api/turnos`;
-          updateState = setTurnos;
-          break;
-        default:
-          console.error('Pestaña activa desconocida');
-          return;
-      }
-  
-      // Realizamos la solicitud PUT para eliminar el registro
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }),  // Enviamos el ID en el cuerpo de la solicitud
-      });
-  
-      if (response.ok) {
-        // Filtramos el estado actual para eliminar el elemento borrado
-        updateState(prevItems => prevItems.filter(item => item.id !== id));
-      } else {
-        alert(`No se pudo eliminar el elemento en la pestaña ${activeTab}.`);
-      }
+        // Mostrar el mensaje de confirmación utilizando SweetAlert2
+        const result = await Swal.fire({
+            title: '¿Está seguro?',
+            text: 'No podrá revertir esta acción.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (!result.isConfirmed) {
+            // Si el usuario cancela, no se procede con la eliminación
+            return;
+        }
+
+        let url = '';
+        let updateState;
+
+        // Seleccionamos la URL y la función de actualización según la pestaña activa
+        switch (activeTab) {
+            case 'medicos':
+                url = `http://localhost:3000/api/medicos`;
+                updateState = setMedicos;
+                break;
+            case 'usuarios':
+                url = `http://localhost:3000/api/usuarios`;
+                updateState = setUsuarios;
+                break;
+            case 'especialidades':
+                url = `http://localhost:3000/api/especialidad`;
+                updateState = setEspecialidad;
+                break;
+            case 'turnos':
+                url = `http://localhost:3000/api/turnos`;
+                updateState = setTurnos;
+                break;
+            default:
+                console.error('Pestaña activa desconocida');
+                return;
+        }
+
+        // Realizamos la solicitud PUT para eliminar el registro
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id }), // Enviamos el ID en el cuerpo de la solicitud
+        });
+
+        if (response.ok) {
+            // Filtramos el estado actual para eliminar el elemento borrado
+            updateState(prevItems => prevItems.filter(item => item.id !== id));
+
+            // Mostrar mensaje de éxito
+            await Swal.fire({
+                title: 'Eliminado',
+                text: 'El registro se ha eliminado satisfactoriamente.',
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: `No se pudo eliminar el elemento en la pestaña ${activeTab}.`,
+                icon: 'error',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar',
+            });
+        }
     } catch (err) {
-      alert(`Error al eliminar el elemento en la pestaña ${activeTab}.`);
+        Swal.fire({
+            title: 'Error',
+            text: `Error al eliminar el elemento en la pestaña ${activeTab}.`,
+            icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Aceptar',
+        });
     }
-  };
+};
 
+const handleView = (id) => {
+  navigate('/vista', { state: { activeTab, id } });
+};
 
+const handleEdit = (id) => {
+  navigate('/editar', { state: { activeTab, id } });
+  // Lógica para editar el médico
+};
 
 
   return (
@@ -441,14 +489,7 @@ export function Administrador() {
   );
 }
 
-// Funciones para manejar los botones (puedes personalizarlas)
-const handleView = (id) => {
-  console.log(`Ver detalles del médico con ID: ${id}`);
-  // Lógica para ver los detalles del médico
-};
 
-const handleEdit = (id) => {
-  console.log(`Editar médico con ID: ${id}`);
-  // Lógica para editar el médico
-};
+
+
 

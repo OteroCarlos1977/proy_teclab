@@ -13,6 +13,8 @@ import { Confirmacion } from './componentes/Confirmacion/Confirmacion.jsx';
 import { Administrador } from './componentes/Administrador/Administrador.jsx';
 import { PrivateRoute } from './componentes/PrivateRoute/PrivateRoute.jsx';
 import { Carga } from './componentes/Carga/Carga.jsx';
+import { Vista } from './componentes/Vista/Vista.jsx';
+import { Editar } from './componentes/Editar/Editar.jsx';
 import { Login } from './componentes/Login/Login.jsx';
 import './App.css';
 
@@ -53,6 +55,8 @@ function App() {
           <Route path="/turno" element={<Turnos />} /> 
           <Route path="/administrar" element={<PrivateRoute isLoggedIn={isLoggedIn}><Administrador /></PrivateRoute>}/>
           <Route path="/carga" element={<Carga />} />
+          <Route path="/vista" element={<Vista />} />
+          <Route path="/editar" element={<Editar />} />
         </Routes>
       </div>
     </Router>
