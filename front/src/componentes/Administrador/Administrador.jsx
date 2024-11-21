@@ -303,7 +303,7 @@ const handleEdit = (id) => {
         <Button
           tooltip="Nuevo" 
           icono={faPlusCircle}
-          style={{ color: 'black' }}
+          style={{ color: 'black', backgroundColor: 'rgba(190, 2, 183, 0.61)' }}
           onClick={(handleShowCarga)}
         />
       </div>
@@ -333,19 +333,19 @@ const handleEdit = (id) => {
                 <td>{medico.matricula}</td>
                 <td>
                 <Button 
-                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(240, 85, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faEye} 
                     tooltip="Ver"
                     onClick={() => handleView(medico.id)} 
                   />
                   <Button 
-                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faEdit} 
                     tooltip="Editar" 
                     onClick={() => handleEdit(medico.id)} 
                   />
                   <Button 
-                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                     icono={faTrash} 
                     tooltip="Eliminar" 
                     onClick={() => handleDelete(medico.id)} 

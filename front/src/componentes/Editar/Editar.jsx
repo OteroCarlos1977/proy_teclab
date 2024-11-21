@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { InputField } from "../InputField/InputField";
+import { Button } from "../Button/Button";
+import { faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 
 export function Editar() {
@@ -290,10 +292,21 @@ export function Editar() {
         )}
 
         <div className="submit-button-container">
-          <button type="submit">Guardar Cambios</button>
-          <button type="button" onClick={() => navigate(-1)}>
-            Cancelar
-          </button>
+        <Button
+        texto="  Guardar"
+        style={{ backgroundColor: '#4CAF50', color: 'white', padding: '10px', borderRadius: '5px' }}
+        onClick={() => console.log('Guardar Cambios')}
+        icono={faSave}
+        tooltip="Guardar los cambios realizados"
+      />
+      <Button
+        texto="  Cancelar"
+        style={{ backgroundColor: '#f44336', color: 'white', padding: '10px', borderRadius: '5px' }}
+        onClick={() => navigate("/administrar")}
+        icono={faTimes}
+        tooltip="Cancelar y volver"
+      />
+          
         </div>
       </form>
     </div>

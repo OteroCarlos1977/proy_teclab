@@ -22,13 +22,18 @@ export function Turnos() {
     setLoading(true);
     setShowTableHeader(false); // Oculta el encabezado antes de buscar
     try {
+      console.log('DNI ingresado:', dni);
       const response = await fetch(`http://localhost:3000/api/turnos/${dni}`);
       const data = await response.json();
       console.log(data); 
       if (!data.error) {
-        const turnosFiltrados = data.body.filter(turno => 
-          new Date(turno.fecha_turno) >= new Date() // Filtrar por fecha actual
-        );
+        const turnosFiltrados = data.body.filter(turno => {
+          const fechaTurno = new Date(turno.fecha_turno);
+          const hoy = new Date(); // Fecha actual
+          hoy.setHours(0, 0, 0, 0); // Normaliza a inicio del día
+          return fechaTurno >= hoy; // Compara solo fechas
+        });
+        console.log('Turnos filtrados:', turnosFiltrados);
         setTurnos(turnosFiltrados);
         setError('');
         if (turnosFiltrados.length > 0) {

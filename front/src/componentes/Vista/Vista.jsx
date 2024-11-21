@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button/Button";
-import { faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import Swal from "sweetalert2";
+import { faEdit, faTrash, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 
 export function Vista() {
   const location = useLocation();
@@ -52,6 +53,65 @@ export function Vista() {
     setNuevoRegistro({ ...nuevoRegistro, [name]: value });
   };
 
+  const handleEdit = (id) => {
+    console.log("Esta es un Editar", id);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "¿Está seguro?",
+        text: "No podrá revertir esta acción.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+
+      if (!result.isConfirmed) {
+        return;
+      }
+
+      const url = `http://localhost:3000/api/disponibilidad/`;
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }),
+      });
+
+      if (response.ok) {
+        setDatos((prevDatos) => prevDatos.filter((item) => item.id !== id));
+        await Swal.fire({
+          title: "Eliminado",
+          text: "El registro se ha eliminado satisfactoriamente.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Aceptar",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo eliminar el elemento.",
+          icon: "error",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "Aceptar",
+        });
+      }
+    } catch (err) {
+      Swal.fire({
+        title: "Error",
+        text: "Error al eliminar el elemento.",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Aceptar",
+      });
+    }
+  };
+
   if (activeTab !== "medicos") {
     return (
       <div>
@@ -60,18 +120,9 @@ export function Vista() {
     );
   }
 
-  const handleEdit = (id) => {
-    console.log("Esta es un Editar", id);
-  };
-
-  const handleDelete = (id) => {
-    console.log("Esta es un Eliminar", id);
-  };
-
   return (
     <div>
       <h2>Días Disponibles del Dr. </h2>
-
       {error && <p style={{ color: "red" }}>{error}</p>}
       {datos.length > 0 && (
         <div>
@@ -79,7 +130,7 @@ export function Vista() {
           <Button
             tooltip="Nuevo"
             icono={faPlusCircle}
-            style={{ color: 'black' }}
+            style={{ color: "black", backgroundColor: "rgba(7, 2, 224, 0.7)" }}
             onClick={handleAgregar}
           />
           <table>
@@ -100,11 +151,11 @@ export function Vista() {
                   <td>
                     <Button
                       style={{
-                        backgroundColor: 'rgba(32, 30, 31, 0.24)',
-                        borderRadius: '50%',
-                        color: 'black',
-                        border: 'none',
-                        padding: '10px 15px',
+                        backgroundColor: "rgba(0, 174, 13, 0.8)",
+                        borderRadius: "50%",
+                        color: "black",
+                        border: "none",
+                        padding: "10px 15px",
                       }}
                       icono={faEdit}
                       tooltip="Editar"
@@ -112,11 +163,11 @@ export function Vista() {
                     />
                     <Button
                       style={{
-                        backgroundColor: 'rgba(32, 30, 31, 0.24)',
-                        borderRadius: '50%',
-                        color: 'black',
-                        border: 'none',
-                        padding: '10px 15px',
+                        backgroundColor: "rgba(0, 174, 131, 0.8)",
+                        borderRadius: "50%",
+                        color: "black",
+                        border: "none",
+                        padding: "10px 15px",
                       }}
                       icono={faTrash}
                       tooltip="Eliminar"
@@ -136,7 +187,6 @@ export function Vista() {
         tooltip="Regresar a la página anterior"
       />
 
-      {/* Modal */}
       {isModalOpen && (
         <div
           style={{

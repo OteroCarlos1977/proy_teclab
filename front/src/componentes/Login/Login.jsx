@@ -95,7 +95,7 @@ export function Login({ onLoginSuccess }) {
           <div className="submit-button-container">
           <Button
               texto="Ingresar"
-              style={{}}
+              style={{backgroundColor: 'rgba(255, 0, 0, 0.68)'}}
               type="submit" // Reemplaza por la función deseada
             />
              <Button
