@@ -1,15 +1,19 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button } from "../Button/Button";
+import { faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+//import Swal from "sweetalert2";
 
 export function Vista() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { activeTab, id } = location.state || {};
   const [datos, setDatos] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (activeTab === 'medicos' && id) {
+    if (activeTab === "medicos" && id) {
       // Fetch para obtener los datos del médico
       fetch(`http://localhost:3000/api/disponibilidad/medico/${id}`)
         .then((response) => response.json())
@@ -17,48 +21,26 @@ export function Vista() {
           if (!data.error) {
             setDatos(data.body);
           } else {
-            setError('No se pudieron cargar los datos.');
+            setError("No se pudieron cargar los datos.");
           }
         })
         .catch(() => {
-          setError('Error al conectarse con el servidor.');
+          setError("Error al conectarse con el servidor.");
         });
     }
   }, [activeTab, id]);
 
-  const handleEliminar = (index) => {
-    const nuevosDatos = datos.filter((_, i) => i !== index);
-    setDatos(nuevosDatos);
-  };
-
-  const handleEditar = (index) => {
-    const nuevosDatos = [...datos];
-    const nuevoDia = prompt('Ingrese el nuevo día:', datos[index].dia);
-    const nuevaHoraInicio = prompt('Ingrese la nueva hora de inicio (HH:mm:ss):', datos[index].hora_inicio);
-    const nuevaHoraFin = prompt('Ingrese la nueva hora de fin (HH:mm:ss):', datos[index].hora_fin);
-
-    if (nuevoDia && nuevaHoraInicio && nuevaHoraFin) {
-      nuevosDatos[index] = {
-        ...nuevosDatos[index],
-        dia: nuevoDia,
-        hora_inicio: nuevaHoraInicio,
-        hora_fin: nuevaHoraFin,
-      };
-      setDatos(nuevosDatos);
-    }
-  };
-
-  const handleAgregar = () => {
-    const nuevoDia = prompt('Ingrese el día:');
-    const nuevaHoraInicio = prompt('Ingrese la hora de inicio (HH:mm:ss):');
-    const nuevaHoraFin = prompt('Ingrese la hora de fin (HH:mm:ss):');
+    const handleAgregar = () => {
+    const nuevoDia = prompt("Ingrese el día:");
+    const nuevaHoraInicio = prompt("Ingrese la hora de inicio (HH:mm:ss):");
+    const nuevaHoraFin = prompt("Ingrese la hora de fin (HH:mm:ss):");
 
     if (nuevoDia && nuevaHoraInicio && nuevaHoraFin) {
       setDatos([
         ...datos,
         {
-          apellido: datos[0]?.apellido || '',
-          nombre: datos[0]?.nombre || '',
+          apellido: datos[0]?.apellido || "",
+          nombre: datos[0]?.nombre || "",
           dia: nuevoDia,
           hora_inicio: nuevaHoraInicio,
           hora_fin: nuevaHoraFin,
@@ -67,7 +49,7 @@ export function Vista() {
     }
   };
 
-  if (activeTab !== 'medicos') {
+  if (activeTab !== "medicos") {
     return (
       <div>
         <h2>Detalles no disponibles para esta pestaña</h2>
@@ -75,27 +57,71 @@ export function Vista() {
     );
   }
 
+
+  const handleEdit = (id) => {
+    console.log("Esta es un Editar", id)
+  };
+
+  const handleDelete = (id) => {
+    console.log("Esta es un Eliminar", id)
+  }
+
   return (
     <div>
-      <h2>Detalles del Médico</h2>
-      
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <h2>Días Disponibles del Dr. </h2>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {datos.length > 0 && (
         <div>
           <h3>{`${datos[0].nombre} ${datos[0].apellido}`}</h3>
-          <ul>
-            {datos.map((item, index) => (
-              <li key={index}>
-                {`${item.dia}: ${item.hora_inicio} - ${item.hora_fin}`}
-                <button onClick={() => handleEditar(index)}>Editar</button>
-                <button onClick={() => handleEliminar(index)}>Eliminar</button>
-              </li>
-            ))}
-          </ul>
+          <Button
+          tooltip="Nuevo" 
+          icono={faPlusCircle}
+          style={{ color: 'black' }}
+          onClick={(handleAgregar)}
+        />
+          <table>
+            <thead>
+              <tr>
+                <th>Día</th>
+                <th>Hora Inicio</th>
+                <th>Hora Fin</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datos.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.dia}</td>
+                  <td>{item.hora_inicio}</td>
+                  <td>{item.hora_fin}</td>
+                  <td>
+                  <Button 
+                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    icono={faEdit} 
+                    tooltip="Editar" 
+                    onClick={() => handleEdit(item.id)} 
+                  />
+                  <Button 
+                    style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                    icono={faTrash} 
+                    tooltip="Eliminar" 
+                    onClick={() => handleDelete(item.id)} 
+                  />
+                    
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
-      <button onClick={handleAgregar}>Agregar disponibilidad</button>
+      <Button
+              texto="Volver"
+              style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
+              onClick={() => navigate("/administrar")}
+              tooltip="Regresar a la página anterior"
+            />
     </div>
   );
 }
-
