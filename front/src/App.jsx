@@ -15,6 +15,7 @@ import { PrivateRoute } from './componentes/PrivateRoute/PrivateRoute.jsx';
 import { Carga } from './componentes/Carga/Carga.jsx';
 import { Vista } from './componentes/Vista/Vista.jsx';
 import { Editar } from './componentes/Editar/Editar.jsx';
+import { VistaTurnos } from './componentes/Vista/VistaTurnos.jsx';
 import { Login } from './componentes/Login/Login.jsx';
 import './App.css';
 
@@ -57,6 +58,7 @@ function App() {
           <Route path="/carga" element={<Carga />} />
           <Route path="/vista" element={<Vista />} />
           <Route path="/editar" element={<Editar />} />
+          <Route path="/vista-turnos" element={<VistaTurnos />} />
         </Routes>
       </div>
     </Router>

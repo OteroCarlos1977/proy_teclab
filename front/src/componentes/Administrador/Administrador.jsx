@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button';
-import {faUser, faUserMd, faStethoscope, faCalendarCheck, faEye, faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {faUser, faUserMd, faStethoscope, faCalendarCheck, faEye, faEdit, faTrash, faPlusCircle, faList, faIdCard, faBriefcaseMedical, faHospitalUser } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 
 import './Administrador.css';
@@ -15,8 +15,8 @@ export function Administrador() {
   const [medicos, setMedicos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [especialidad, setEspecialidad] = useState([]);
-  const [turnos, setTurnos] = useState([]);
-  const [activeTab, setActiveTab] = useState('medicos'); // Estado para la pestaña activa
+  const [activeTab, setActiveTab] = useState('medicos');
+  
 
   // Efecto para obtener la lista de médicos
   useEffect(() => {
@@ -85,44 +85,7 @@ export function Administrador() {
     }
   }, [activeTab]);
 
-  useEffect(() => {
-    if (activeTab === 'turnos') {
-      const fetchTurnos = async () => {
-        try {
-          const response = await fetch('http://localhost:3000/api/turnos/');
-          const data = await response.json();
-          if (!data.error && data.body) {
-            const formattedData = data.body.map(turno => {
-              // Formatear la fecha
-              const fechaTurno = new Date(turno.fecha_turno);
-              const formattedFechaTurno = fechaTurno.toLocaleDateString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              });
   
-              // Formatear la hora
-              const horario = turno.horario.slice(0, 5); // Recorta la cadena para dejar solo "HH:MM"
-  
-              return {
-                ...turno,
-                fecha_turno: formattedFechaTurno,
-                horario: horario
-              };
-            });
-  
-            setTurnos(formattedData);
-          } else {
-            console.error('Error al obtener la lista de turnos');
-          }
-        } catch (error) {
-          console.error('Error en la solicitud:', error);
-        }
-      };
-  
-      fetchTurnos();
-    }
-  }, [activeTab]);
 
   // Filtrar médicos según el término de búsqueda
   const filteredMedicos = medicos.filter(medico =>
@@ -143,12 +106,7 @@ export function Administrador() {
     )
   );
 
-  const filteredTurnos = turnos.filter(turno =>
-    Object.values(turno).some(value =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
+  
   // Función para cambiar de pestaña
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -197,10 +155,6 @@ const handleDelete = async (id) => {
             case 'especialidades':
                 url = `http://localhost:3000/api/especialidad`;
                 updateState = setEspecialidad;
-                break;
-            case 'turnos':
-                url = `http://localhost:3000/api/turnos`;
-                updateState = setTurnos;
                 break;
             default:
                 console.error('Pestaña activa desconocida');
@@ -440,46 +394,36 @@ const handleEdit = (id) => {
       
 
       {activeTab === 'turnos' && (
-        <table>
-        <thead>
-          <tr>
-            <th>Nombre Paciente</th>
-            <th>DNI</th>
-            <th>Fecha Turno</th>
-            <th>Horario</th>
-            <th>Especialidad</th>
-            <th>Nombre Medico</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTurnos.map((turno) => (
-            <tr key={turno.id}>
-              <td>{`${turno.paciente_nombre} ${turno.paciente_apellido}`}</td>
-              <td>{turno.dni}</td>
-              <td>{turno.fecha_turno}</td>
-              <td>{turno.horario}</td>
-              <td>{turno.especialidad}</td>
-              <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
-              <td>
-                <Button 
-                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
-                  icono={faEdit} 
-                  tooltip="Editar" 
-                  onClick={() => handleEdit(turno.id)} 
-                />
-                <Button 
-                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
-                  icono={faTrash} 
-                  tooltip="Eliminar" 
-                  onClick={() => handleDelete(turno.id)} 
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      )}
+        
+        <div>
+        <Button 
+        style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+        icono={faList} 
+        tooltip="Todos" 
+        onClick={() => navigate('/vista-turnos', { state: { vista:'todos' } })} 
+        />
+        <Button 
+        style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+        icono={faIdCard} 
+        tooltip="Por DNI" 
+        onClick={() => navigate('/vista-turnos', { state: { vista: 'dni' } })} 
+        />
+        <Button 
+        style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+        icono={faBriefcaseMedical} 
+        tooltip="Por Especialidad" 
+        onClick={() => navigate('/vista-turnos', { state: { vista: 'especialidad' } })} 
+        />
+        <Button 
+        style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+        icono={faHospitalUser} 
+        tooltip="Por Medico" 
+        onClick={() => navigate('/vista-turnos', { state: { vista: 'medico' } })} 
+        />
+      
+      </div>
+      
+       )}; 
     </>
   );
 }
