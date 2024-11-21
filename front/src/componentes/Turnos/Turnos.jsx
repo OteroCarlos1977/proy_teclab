@@ -87,7 +87,7 @@ export function Turnos() {
       />
       <Button
           texto="Buscar"
-          style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
+          style={{ backgroundColor: "rgba(204, 118, 7, 0.8)" }}
           onClick={() => handleBuscarClick()}
         />
       

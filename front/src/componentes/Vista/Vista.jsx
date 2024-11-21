@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../Button/Button";
+import {faTimes, faSave, faEdit, faTrash, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
-import { faEdit, faTrash, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+
 
 export function Vista() {
   const location = useLocation();
@@ -45,7 +46,13 @@ export function Vista() {
   const handleGuardar = () => {
     setDatos([...datos, nuevoRegistro]);
     setIsModalOpen(false);
-    alert("Registro guardado exitosamente");
+    Swal.fire({
+      title: "Exito al Guardar",
+      text: "El nuevo horario fue guardado",
+      icon: "success",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "Aceptar",
+    });
   };
 
   const handleInputChange = (e) => {
@@ -232,12 +239,30 @@ export function Vista() {
               />
             </label>
             <br />
-            <button type="button" onClick={handleGuardar}>
-              Guardar
-            </button>
-            <button type="button" onClick={() => setIsModalOpen(false)}>
-              Cancelar
-            </button>
+            <Button
+              texto="   Guardar"
+              style={{
+                backgroundColor: "rgba(7, 87, 173, 0.8)",
+                color: "white",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+              onClick={() => handleGuardar()}
+              icono={faSave}
+              tooltip="Guardar los cambios realizados"
+            />
+            <Button
+              texto="   Cancelar"
+              style={{
+                backgroundColor: "rgba(223, 112, 14, 0.85)",
+                color: "white",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+              onClick={() => navigate('/Administrador')}
+              icono={faTimes}
+              tooltip="Cancelar y volver"
+            />
           </form>
         </div>
       )}

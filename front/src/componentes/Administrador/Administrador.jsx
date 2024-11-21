@@ -384,20 +384,15 @@ const handleEdit = (id) => {
               <td>{usuario.usuario}</td>
               <td>{usuario.password}</td>
               <td>
-              <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
-                  icono={faEye} 
-                  tooltip="Ver"
-                  onClick={() => handleView(usuario.id)} 
-                />
+              
                 <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(usuario.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(usuario.id)} 
@@ -424,13 +419,13 @@ const handleEdit = (id) => {
               <td>{especialidad.espec}</td>
               <td>
                <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(especialidad.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(especialidad.id)} 
@@ -468,13 +463,13 @@ const handleEdit = (id) => {
               <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
               <td>
                 <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faEdit} 
                   tooltip="Editar" 
                   onClick={() => handleEdit(turno.id)} 
                 />
                 <Button 
-                  style={{ backgroundColor: 'rgba(32, 30, 31, 0.24)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
+                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }} 
                   icono={faTrash} 
                   tooltip="Eliminar" 
                   onClick={() => handleDelete(turno.id)} 
