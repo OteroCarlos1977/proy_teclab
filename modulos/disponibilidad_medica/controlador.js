@@ -27,10 +27,15 @@ module.exports = function(dbInyectada){
     function agregar(body){
         return db.agregar(TABLA, body);
     }
+
+    function uno_medico(id){
+        return db.uno_medico(id);
+    }
     return {
         todos,
         uno,
         agregar,
         eliminar,
+        uno_medico,
     }
 }

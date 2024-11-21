@@ -4,6 +4,7 @@ const controlador = require("./index");
 const router = express.Router();
 
 router.get("/", todos);
+router.get("/medico/:id", uno_medico);
 router.get("/:id", uno);
 router.post("/", agregar);
 router.put("/", eliminar);
@@ -20,6 +21,15 @@ async function todos(req, res, next) {
 async function uno(req, res, next) {
   try {
     const items = await controlador.uno(req.params.id);
+    respuesta.success(req, res, items, 200);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function uno_medico(req, res, next) {
+  try {
+    const items = await controlador.uno_medico(req.params.id);
     respuesta.success(req, res, items, 200);
   } catch (err) {
     next(err);

@@ -52,6 +52,8 @@ function conectarDB() {
     }
 
     
+
+    
     function usuarios(usuario) {
         return new Promise((resolve, reject) => {
             // Consulta SQL con JOIN
@@ -119,12 +121,20 @@ function conectarDB() {
         });
     }
 
-    function uno_medico(tabla, id){
-        return new Promise((resolve, reject)=>{
-            conexion.query(`SELECT * FROM ${tabla} WHERE medico_id=${id} AND (fecha_turno > CURDATE() OR (fecha_turno = CURDATE() AND horario > CURTIME()))`, (error, result)=>{
+    function uno_medico(medico_id){
+        return new Promise((resolve, reject) => {
+            const query = `
+                SELECT m.apellido, m.nombre, d.dia, md.hora_inicio, md.hora_fin 
+                FROM disponibilidad_medica AS md 
+                JOIN dias AS d ON d.id = md.dia_semana 
+                JOIN medicos AS m ON md.medico_id = m.id 
+                WHERE md.medico_id = ?;
+            `;
+            conexion.query(query, [medico_id], (error, result) => {
                 return error ? reject(error) : resolve(result);
             });
         });
+        
     }
 
     function uno_especialidad(tabla, id){
@@ -212,5 +222,6 @@ function conectarDB() {
         eliminar,
         query, 
         disponible,
-        especialidad
+        especialidad,
+
     }
