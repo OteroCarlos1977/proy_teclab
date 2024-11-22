@@ -74,9 +74,8 @@ function conectarDB() {
         return new Promise((resolve, reject) => {
             // Consulta SQL con JOIN
             const sql = `
-                SELECT t.id, t.paciente_dni, t.fecha_turno, t.horario, m.nombre AS medico_nombre, m.apellido AS medico_apellido , e.espec AS especialidad, p.nombre AS paciente_nombre, p.apellido AS paciente_apellido 
-                FROM turnos t 
-                JOIN medicos m ON t.medico_id = m.id 
+                SELECT t.id, t.paciente_dni, t.fecha_turno, t.horario, m.nombre AS medico_nombre, m.apellido AS medico_apellido , m.id AS medico_id, e.id AS espec_id, e.espec AS especialidad, p.nombre AS paciente_nombre, p.apellido AS paciente_apellido 
+                FROM turnos t JOIN medicos m ON t.medico_id = m.id 
                 JOIN especialidad e ON t.especialidad_id = e.id 
                 JOIN pacientes p ON t.paciente_dni = p.dni;
                 `;

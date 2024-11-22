@@ -11,6 +11,8 @@ export const VistaTurnos = () => {
 
   const [turnos, setTurnos] = useState([]);
   const [filteredTurnos, setFilteredTurnos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controla la visibilidad del modal
+  const [filterValue, setFilterValue] = useState(''); // Guarda el valor del filtro ingresado
 
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -19,22 +21,27 @@ export const VistaTurnos = () => {
         const data = await response.json();
 
         if (!data.error && data.body) {
-          const formattedData = data.body.map(turno => {
-            const fechaTurno = new Date(turno.fecha_turno);
-            const formattedFechaTurno = fechaTurno.toLocaleDateString('es-ES', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-            });
+          const hoy = new Date();
 
-            const horario = turno.horario.slice(0, 5); // Recortar "HH:MM"
+          const formattedData = data.body
+            .map(turno => {
+              const fechaTurno = new Date(turno.fecha_turno);
+              const formattedFechaTurno = fechaTurno.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              });
 
-            return {
-              ...turno,
-              fecha_turno: formattedFechaTurno,
-              horario: horario,
-            };
-          });
+              const horario = turno.horario.slice(0, 5); // Recortar "HH:MM"
+
+              return {
+                ...turno,
+                fecha_turno: formattedFechaTurno,
+                horario: horario,
+                fecha_original: fechaTurno, // Mantener formato Date para comparación
+              };
+            })
+            .filter(turno => turno.fecha_original > hoy); // Filtrar turnos futuros
 
           setTurnos(formattedData);
         }
@@ -52,19 +59,30 @@ export const VistaTurnos = () => {
         setFilteredTurnos(turnos);
         break;
       case 'dni':
-        setFilteredTurnos(turnos.filter(turno => turno.dni));
-        break;
-      case 'especialidad':
-        setFilteredTurnos(turnos.filter(turno => turno.especialidad));
-        break;
       case 'medico':
-        setFilteredTurnos(turnos.filter(turno => turno.medico_nombre));
+      case 'especialidad':
+        setIsModalOpen(true); // Abrir modal cuando se selecciona un filtro
         break;
       default:
         setFilteredTurnos([]);
         break;
     }
   }, [vista, turnos]);
+
+  const handleFilter = () => {
+    let filtered;
+    if (vista === 'dni') {
+      filtered = turnos.filter(turno => turno.paciente_dni.toString() === filterValue);
+    } else if (vista === 'medico') {
+      filtered = turnos.filter(
+        turno => `${turno.medico_nombre} ${turno.medico_apellido}` === filterValue
+      );
+    } else if (vista === 'especialidad') {
+      filtered = turnos.filter(turno => turno.especialidad === filterValue);
+    }
+    setFilteredTurnos(filtered);
+    setIsModalOpen(false); // Cerrar modal
+  };
 
   const renderTabla = () => (
     <table>
@@ -106,16 +124,56 @@ export const VistaTurnos = () => {
     </table>
   );
 
-  return <div>
-    <div className='encabezado'>
-      <h4>Listado de Turnos</h4>
-      <Button
-              texto="Volver"
-              style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
-              onClick={() => navigate("/administrar")}
-              tooltip="Regresar a la página anterior"
-            />
-    </div> 
-    {renderTabla()}
-    </div>;
+  const renderModal = () => (
+    <div className="modal">
+      <div className="modal-content">
+        <h3>Filtrar por {vista}</h3>
+        {vista === 'dni' && (
+          <input
+            type="text"
+            placeholder="Ingrese DNI del paciente"
+            value={filterValue}
+            onChange={e => setFilterValue(e.target.value)}
+          />
+        )}
+        {vista === 'medico' && (
+          <input
+            type="text"
+            placeholder="Ingrese Nombre y Apellido del Médico"
+            value={filterValue}
+            onChange={e => setFilterValue(e.target.value)}
+          />
+        )}
+        {vista === 'especialidad' && (
+          <input
+            type="text"
+            placeholder="Ingrese Especialidad"
+            value={filterValue}
+            onChange={e => setFilterValue(e.target.value)}
+          />
+        )}
+        <div>
+          <Button texto="Filtrar" onClick={handleFilter} />
+          <Button texto="Cancelar" onClick={() => setIsModalOpen(false)} />
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div>
+      <div className="encabezado">
+        <h4>Listado de Turnos</h4>
+        <Button
+          texto="Volver"
+          style={{ backgroundColor: 'rgba(117, 225, 113, 0.8)' }}
+          onClick={() => navigate('/administrar')}
+          tooltip="Regresar a la página anterior"
+        />
+      </div>
+      {renderTabla()}
+      {isModalOpen && renderModal()}
+    </div>
+  );
 };
+
