@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button'; // Asegúrate de importar el botón correctamente
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
+import jsPDF from 'jspdf';
 
 export const VistaTurnos = () => {
   const location = useLocation();
@@ -11,8 +12,10 @@ export const VistaTurnos = () => {
 
   const [turnos, setTurnos] = useState([]);
   const [filteredTurnos, setFilteredTurnos] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Controla la visibilidad del modal
-  const [filterValue, setFilterValue] = useState(''); // Guarda el valor del filtro ingresado
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState('');
+  const [medicos, setMedicos] = useState([]);
+  const [especialidades, setEspecialidades] = useState([]);
 
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -32,18 +35,25 @@ export const VistaTurnos = () => {
                 year: 'numeric',
               });
 
-              const horario = turno.horario.slice(0, 5); // Recortar "HH:MM"
+              const horario = turno.horario.slice(0, 5);
 
               return {
                 ...turno,
                 fecha_turno: formattedFechaTurno,
                 horario: horario,
-                fecha_original: fechaTurno, // Mantener formato Date para comparación
+                fecha_original: fechaTurno,
               };
             })
-            .filter(turno => turno.fecha_original > hoy); // Filtrar turnos futuros
+            .filter(turno => turno.fecha_original > hoy);
 
           setTurnos(formattedData);
+
+          // Generar listas únicas de médicos y especialidades
+          const uniqueMedicos = [...new Set(formattedData.map(turno => `${turno.medico_nombre} ${turno.medico_apellido}`))];
+          const uniqueEspecialidades = [...new Set(formattedData.map(turno => turno.especialidad))];
+
+          setMedicos(uniqueMedicos);
+          setEspecialidades(uniqueEspecialidades);
         }
       } catch (error) {
         console.error('Error al obtener la lista de turnos:', error);
@@ -61,7 +71,7 @@ export const VistaTurnos = () => {
       case 'dni':
       case 'medico':
       case 'especialidad':
-        setIsModalOpen(true); // Abrir modal cuando se selecciona un filtro
+        setIsModalOpen(true);
         break;
       default:
         setFilteredTurnos([]);
@@ -74,54 +84,74 @@ export const VistaTurnos = () => {
     if (vista === 'dni') {
       filtered = turnos.filter(turno => turno.paciente_dni.toString() === filterValue);
     } else if (vista === 'medico') {
-      filtered = turnos.filter(
-        turno => `${turno.medico_nombre} ${turno.medico_apellido}` === filterValue
-      );
+      filtered = turnos.filter(turno => `${turno.medico_nombre} ${turno.medico_apellido}` === filterValue);
     } else if (vista === 'especialidad') {
       filtered = turnos.filter(turno => turno.especialidad === filterValue);
     }
     setFilteredTurnos(filtered);
-    setIsModalOpen(false); // Cerrar modal
+    setIsModalOpen(false);
+  };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text('Listado de Turnos', 10, 10);
+    let startY = 20;
+
+    filteredTurnos.forEach((turno, index) => {
+      const text = `#${index + 1} - Paciente: ${turno.paciente_nombre} ${turno.paciente_apellido}, Fecha: ${turno.fecha_turno}, Horario: ${turno.horario}, Especialidad: ${turno.especialidad}, Médico: ${turno.medico_nombre} ${turno.medico_apellido}`;
+      doc.text(text, 10, startY);
+      startY += 10;
+    });
+
+    doc.save('listado-turnos.pdf');
   };
 
   const renderTabla = () => (
-    <table>
-      <thead>
-        <tr>
-          <th>Nombre Paciente</th>
-          <th>Fecha Turno</th>
-          <th>Horario</th>
-          <th>Especialidad</th>
-          <th>Nombre Medico</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        {filteredTurnos.map(turno => (
-          <tr key={turno.id}>
-            <td>{`${turno.paciente_nombre} ${turno.paciente_apellido}`}</td>
-            <td>{turno.fecha_turno}</td>
-            <td>{turno.horario}</td>
-            <td>{turno.especialidad}</td>
-            <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
-            <td>
-              <Button
-                style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
-                icono={faEdit}
-                tooltip="Editar"
-                onClick={() => console.log('Editar', turno.id)}
-              />
-              <Button
-                style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
-                icono={faTrash}
-                tooltip="Eliminar"
-                onClick={() => console.log('Eliminar', turno.id)}
-              />
-            </td>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre Paciente</th>
+            <th>Fecha Turno</th>
+            <th>Horario</th>
+            <th>Especialidad</th>
+            <th>Nombre Medico</th>
+            <th>Acciones</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {filteredTurnos.map(turno => (
+            <tr key={turno.id}>
+              <td>{`${turno.paciente_nombre} ${turno.paciente_apellido}`}</td>
+              <td>{turno.fecha_turno}</td>
+              <td>{turno.horario}</td>
+              <td>{turno.especialidad}</td>
+              <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
+              <td>
+                <Button
+                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
+                  icono={faEdit}
+                  tooltip="Editar"
+                  onClick={() => console.log('Editar', turno.id)}
+                />
+                <Button
+                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
+                  icono={faTrash}
+                  tooltip="Eliminar"
+                  onClick={() => console.log('Eliminar', turno.id)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <Button
+        texto="Descargar PDF"
+        icono={faDownload}
+        onClick={downloadPDF}
+        style={{ marginTop: '20px', backgroundColor: 'rgba(0, 123, 255, 0.8)' }}
+      />
+    </div>
   );
 
   const renderModal = () => (
@@ -137,20 +167,20 @@ export const VistaTurnos = () => {
           />
         )}
         {vista === 'medico' && (
-          <input
-            type="text"
-            placeholder="Ingrese Nombre y Apellido del Médico"
-            value={filterValue}
-            onChange={e => setFilterValue(e.target.value)}
-          />
+          <select value={filterValue} onChange={e => setFilterValue(e.target.value)}>
+            <option value="">Seleccione un Médico</option>
+            {medicos.map((medico, index) => (
+              <option key={index} value={medico}>{medico}</option>
+            ))}
+          </select>
         )}
         {vista === 'especialidad' && (
-          <input
-            type="text"
-            placeholder="Ingrese Especialidad"
-            value={filterValue}
-            onChange={e => setFilterValue(e.target.value)}
-          />
+          <select value={filterValue} onChange={e => setFilterValue(e.target.value)}>
+            <option value="">Seleccione una Especialidad</option>
+            {especialidades.map((especialidad, index) => (
+              <option key={index} value={especialidad}>{especialidad}</option>
+            ))}
+          </select>
         )}
         <div>
           <Button texto="Filtrar" onClick={handleFilter} />
@@ -176,4 +206,3 @@ export const VistaTurnos = () => {
     </div>
   );
 };
-
