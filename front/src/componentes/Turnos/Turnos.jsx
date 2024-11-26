@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '../Button/Button';
 import { useNavigate } from "react-router-dom";
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Swal from "sweetalert2";
 
 import './Turnos.css'
 
@@ -50,21 +51,38 @@ export function Turnos() {
 
   const cancelarTurno = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/turnos`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }),  // Envía el ID del turno en el cuerpo
+      // Mostrar el diálogo de confirmación
+      const result = await Swal.fire({
+        title: '¿Está seguro?',
+        text: 'No podrá revertir esta acción.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
       });
   
-      if (response.ok) {
-        setTurnos(turnos.filter(turno => turno.id !== id));
-      } else {
-        alert('No se pudo cancelar el turno.');
+      // Si el usuario confirma, procede con la cancelación
+      if (result.isConfirmed) {
+        const response = await fetch(`http://localhost:3000/api/turnos`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }), // Envía el ID del turno en el cuerpo
+        });
+  
+        if (response.ok) {
+          // Actualiza el estado local
+          setTurnos(turnos.filter(turno => turno.id !== id));
+          Swal.fire('Eliminado', 'El turno ha sido cancelado.', 'success');
+        } else {
+          Swal.fire('Error', 'No se pudo cancelar el turno.', 'error');
+        }
       }
     } catch (err) {
-      alert('Error al cancelar el turno.');
+      Swal.fire('Error', 'Error al cancelar el turno.', 'error');
     }
   };
 
@@ -117,7 +135,7 @@ export function Turnos() {
                     icono={faTrash}
                     style={{ backgroundColor: 'red', borderRadius: '50%', color: 'white', border: 'none', padding: '10px 15px' }} 
                     onClick={() => cancelarTurno(turno.id)}
-                    tooltip="Eliminar"
+                    tooltip="Cancelar Turno"
                      
                   />
                 </td>

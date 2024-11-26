@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../Button/Button'; // Asegúrate de importar el botón correctamente
-import { faEdit, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import jsPDF from 'jspdf';
 
 export const VistaTurnos = () => {
@@ -108,49 +108,40 @@ export const VistaTurnos = () => {
 
   const renderTabla = () => (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre Paciente</th>
-            <th>Fecha Turno</th>
-            <th>Horario</th>
-            <th>Especialidad</th>
-            <th>Nombre Medico</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTurnos.map(turno => (
-            <tr key={turno.id}>
-              <td>{`${turno.paciente_nombre} ${turno.paciente_apellido}`}</td>
-              <td>{turno.fecha_turno}</td>
-              <td>{turno.horario}</td>
-              <td>{turno.especialidad}</td>
-              <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
-              <td>
-                <Button
-                  style={{ backgroundColor: 'rgba(0, 174, 13, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
-                  icono={faEdit}
-                  tooltip="Editar"
-                  onClick={() => console.log('Editar', turno.id)}
-                />
-                <Button
-                  style={{ backgroundColor: 'rgba(0, 174, 131, 0.8)', borderRadius: '50%', color: 'black', border: 'none', padding: '10px 15px' }}
-                  icono={faTrash}
-                  tooltip="Eliminar"
-                  onClick={() => console.log('Eliminar', turno.id)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <Button
-        texto="Descargar PDF"
-        icono={faDownload}
-        onClick={downloadPDF}
-        style={{ marginTop: '20px', backgroundColor: 'rgba(0, 123, 255, 0.8)' }}
-      />
+      {filteredTurnos.length > 0 ? (
+        <>
+          <table>
+            <thead>
+              <tr>
+                <th>Nombre Paciente</th>
+                <th>Fecha Turno</th>
+                <th>Horario</th>
+                <th>Especialidad</th>
+                <th>Nombre Médico</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTurnos.map(turno => (
+                <tr key={turno.id}>
+                  <td>{`${turno.paciente_nombre} ${turno.paciente_apellido}`}</td>
+                  <td>{turno.fecha_turno}</td>
+                  <td>{turno.horario}</td>
+                  <td>{turno.especialidad}</td>
+                  <td>{`${turno.medico_nombre} ${turno.medico_apellido}`}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <Button
+            texto="Descargar PDF"
+            icono={faDownload}
+            onClick={downloadPDF}
+            style={{ marginTop: '20px', backgroundColor: 'rgba(0, 123, 255, 0.8)' }}
+          />
+        </>
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 
@@ -184,7 +175,7 @@ export const VistaTurnos = () => {
         )}
         <div>
           <Button texto="Filtrar" onClick={handleFilter} />
-          <Button texto="Cancelar" onClick={() => setIsModalOpen(false)} />
+          
         </div>
       </div>
     </div>

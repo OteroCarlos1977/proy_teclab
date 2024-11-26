@@ -4,6 +4,7 @@ import { Button } from "../Button/Button.jsx";
 import { InputField } from "../InputField/InputField";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import { faSave, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import "./Carga.css";
@@ -253,7 +254,7 @@ export function Carga() {
           <div className="submit-button-container">
             <Button
               type="submit" // Importante para que funcione como un botón de envío
-              texto={`Guardar ${
+              texto={` Guardar ${
                 activeTab === "medicos"
                   ? "Médico"
                   : activeTab === "usuarios"
@@ -263,21 +264,30 @@ export function Carga() {
                   : "Turno"
               }`}
               style={{
-                backgroundColor: "#4CAF50", 
+                backgroundColor: "#4CAF50",
                 color: "white",
                 padding: "10px 20px",
                 border: "none",
                 borderRadius: "5px",
                 cursor: "pointer",
               }}
+              icono={faSave}
             />
-            <Button
-              texto="Volver"
-              style={{ backgroundColor: "rgba(117, 225, 113, 0.8)" }}
-              onClick={() => navigate("/administrar")}
-              tooltip="Regresar a la página anterior"
-            />
-          </div>
+            
+              <Button
+                texto="  Cancelar"
+                style={{
+                  backgroundColor: "#f44336",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "5px",
+                }}
+                onClick={() => navigate("/administrar")}
+                icono={faTimes}
+                tooltip="Cancelar y volver"
+              />
+            </div>
+          
         </form>
       </div>
     </>
